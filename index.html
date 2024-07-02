@@ -8,13 +8,7 @@
 </head>
 
 <style>
-    .content {
-        display: none;
-    }
 
-    .active {
-        display: block;
-    }
 </style>
 
 <body>
@@ -23,19 +17,15 @@
         <button onclick="showObject('home')">Home</button>
         <button onclick="showObject('about')">About</button>
     </nav>
-
-    <object class="content" id="home" data="home.html" type="text/html" style="width: 100%; height: 100px;"></object>
-    <object class="content" id="about" data="about.html" type="text/html" style="width: 100%; height: 100px;"></object>
-
+    <div id="container"></div>
+    <script src="home.js"></script>
+    <script src="about.js"></script>
     <script>
+        let container = document.getElementById('container')
+        container.innerHTML = home
         function showObject(id) {
-            let elements = document.querySelectorAll(".content")
-            console.log(elements)
-            elements.forEach(function (el) {
-                el.classList.remove('active')
-            })
-
-            document.getElementById(id).classList.add('active')
+            if (id == 'home') container.innerHTML = home
+            else if (id == 'about') container.innerHTML = about
         }
     </script>
 </body>
