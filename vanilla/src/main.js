@@ -1,5 +1,5 @@
-import home from '/components/home.js'
-import about from '/components/about.js'
+import home from './views/home.js'
+import about from './views/about.js'
 
 let container = document.getElementById('container')
 container.innerHTML = home
