@@ -1,15 +1,17 @@
 import home from '../views/home.js'
 import about from '../views/about.js'
 
-let container = document.getElementById('container')
-container.innerHTML = home
+// container.innerHTML = home
 const routes = {
-    '/': home,
-    '/about': about
+    '#home': home,
+    '#about': about
 }
-function router(id) {
-    if (id == 'home') container.innerHTML = home
-    else if (id == 'about') container.innerHTML = about
+
+function router() {
+    let container = document.getElementById('container')
+    let path = window.location.hash
+    let content = routes[path]
+    container.innerHTML = content.render() || home
 }
 
 export default router

@@ -3,8 +3,8 @@ const nav = `
 <nav>
     <button onclick="router('home')">Home</button>
     <button onclick="router('about')">About</button>
-    <a href="/">Home</a>
-    <a href="/about">About</a>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
 </nav>
 <div id="container"></div>
 `
