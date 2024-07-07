@@ -8,7 +8,8 @@ const routes = {
 }
 
 function router() {
-    let container = document.getElementById('container')
+    let shadowDOM = document.querySelector('router-view')
+    let container = shadowDOM.shadowRoot.getElementById('container')
     let path = window.location.hash.replace('#', '') || '/'
     let content = routes[path]
     container.innerHTML = content.render() || home
