@@ -1,26 +1,13 @@
-class HelloWorld extends HTMLElement {
+import RouterClass from "./RouterClass.js";
+
+class HelloWorld extends RouterClass {
     constructor() {
-        // Always call super first in constructor
         super();
-        this.attachShadow({ mode: "open" })
-    }
 
-    static get observedAttributes() {
-        return ['msg'];
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'msg') {
-            this.render()
-        }
-    }
-
-    connectedCallback() {
-        this.render()
     }
 
     render() {
-        const msg = this.getAttribute('msg') || '/'
+        const msg = this.getAttribute('msg') || 'Add msg'
         this.shadowRoot.innerHTML = `
         <style>
             div {

@@ -1,22 +1,7 @@
-class RouterLink extends HTMLElement {
+import RouterClass from "./RouterClass.js";
+class RouterLink extends RouterClass {
     constructor() {
-        // Always call super first in constructor
         super();
-        this.attachShadow({ mode: "open" })
-    }
-
-    static get observedAttributes() {
-        return ['to'];
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'to') {
-            this.render()
-        }
-    }
-
-    connectedCallback() {
-        this.render()
     }
 
     render() {

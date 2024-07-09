@@ -1,11 +1,10 @@
-class RouterView extends HTMLElement {
+import RouterClass from "./RouterClass.js";
+class RouterView extends RouterClass {
     constructor() {
-        // Always call super first in constructor
         super();
-        this.attachShadow({ mode: "open" })
     }
 
-    connectedCallback() {
+    render() {
         this.shadowRoot.innerHTML = `
         <div id="container"></div>
     `
