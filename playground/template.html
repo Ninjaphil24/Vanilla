@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .affected {
+            width: 200px;
+            height: 100px;
+            background-color: blue;
+        }
+
+        .hidden+.affected {
+            background-color: aquamarine;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Template</h2>
+    <a href="notemplate.html">No Template</a>
+    <button onclick="toggle()">Toggle Modal</button>
+    <template>
+        <div class="hidden"></div>
+    </template>
+    <div class="affected"></div>
+
+    <script>
+        const template = document.querySelector('template')
+        const affected = document.querySelector('.affected')
+        let bool = false
+        function toggle() {
+            if (!bool) {
+                let clone = template.content.cloneNode(true)
+                document.body.insertBefore(clone, affected)
+                bool = true
+            } else if (bool) {
+                const hidden = document.querySelector('.hidden')
+                document.body.removeChild(hidden)
+                bool = false
+            }
+        }
+    </script>
+</body>
+
+</html>

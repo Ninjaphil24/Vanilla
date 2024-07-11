@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Template</title>
+    <style>
+        .modal {
+            display: block;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(84, 36, 228);
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: white;
+        }
+
+        .modal.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>No Template</h2>
+    <a href="template.html">Template</a>
+    <button onclick="toggle()">Toggle Modal</button>
+    <!-- <div class="modal">Hello, I am a modal</div> -->
+    <script>
+        // const modal = document.querySelector('.modal')
+        let bool = false
+        function toggle() {
+            if (!bool) {
+                const modal = document.createElement('div')
+                modal.classList.add('modal')
+                modal.textContent = "Hello, I am a modal"
+                document.body.appendChild(modal)
+                bool = true
+            } else if (bool) {
+                const modal = document.querySelector('.modal')
+                document.body.removeChild(modal)
+                bool = false
+            }
+        }
+    </script>
+</body>
+
+</html>
