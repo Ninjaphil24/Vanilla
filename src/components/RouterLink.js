@@ -1,12 +1,10 @@
-import RouterClass from "./RouterClass.js";
-class RouterLink extends RouterClass {
+class RouterLink extends HTMLElement {
     constructor() {
         super();
     }
 
-    render() {
-        const to = this.getAttribute('to') || '/'
-        this.shadowRoot.innerHTML = `
+    connectedCallback() {
+        this.innerHTML = `
         <style>
             a {
                 text-decoration: none;
@@ -14,8 +12,14 @@ class RouterLink extends RouterClass {
                 padding: 0 10px;
             }
         </style>
-        <a href="${to}"><slot></slot></a>
-    `
+        <template id="template-rl">
+           <a href="#/">Home</a>
+           <a href="#/about">About</a>
+        </template>
+        `
+        const template = document.querySelector('#template-rl')
+        let clone = template.content.cloneNode(true)
+        this.appendChild(clone)
     }
 }
 

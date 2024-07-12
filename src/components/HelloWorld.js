@@ -1,23 +1,26 @@
-import RouterClass from "./RouterClass.js";
-
-class HelloWorld extends RouterClass {
+class HelloWorld extends HTMLElement {
     constructor() {
         super();
 
     }
 
-    render() {
+    connectedCallback() {
         const msg = this.getAttribute('msg') || 'Add msg'
-        this.shadowRoot.innerHTML = `
+        this.innerHTML = `
         <style>
-            div {
+            #hw {
                 font-size: 40px;
                 color: blue;
                 padding: 0 10px;
             }
         </style>
-        <div>${msg}</div>
+        <template id="template-hw">
+            <div id="hw">${msg}</div>
+        </template>
     `
+        const template = document.querySelector('#template-hw')
+        let clone = template.content.cloneNode(true)
+        this.appendChild(clone)
     }
 }
 

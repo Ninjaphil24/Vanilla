@@ -1,13 +1,17 @@
-import RouterClass from "./RouterClass.js";
-class RouterView extends RouterClass {
+class RouterView extends HTMLElement {
     constructor() {
         super();
     }
 
-    render() {
-        this.shadowRoot.innerHTML = `
-        <div id="container"></div>
-    `
+    connectedCallback() {
+        this.innerHTML = `
+        <template id="template-rv">
+           <div id="container"></div>
+        </template>
+        `
+        const template = document.querySelector('#template-rv')
+        let clone = template.content.cloneNode(true)
+        this.appendChild(clone)
     }
 }
 

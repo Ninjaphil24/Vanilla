@@ -3,12 +3,15 @@ import RouterLink from "./components/RouterLink.js"
 import HelloWorld from "./components/HelloWorld.js"
 
 const nav = `
+<template id="template-app">
 <hello-world msg="Hello World"></hello-world>
-<nav>
-    <router-link to="#/">Home</router-link>
-    <router-link to="#/about">About</router-link>
-</nav>
+<router-link></router-link>
 <router-view></router-view>
+</template>
 `
-const App = document.getElementById('app').innerHTML = nav
+const App = document.getElementById('app')
+App.innerHTML = nav
+const template = document.querySelector('#template-app')
+let clone = template.content.cloneNode(true)
+App.appendChild(clone)
 export default App
