@@ -17,3 +17,80 @@ HTMLElement (Web Components)
     ├── importNode()
     ├── innerHTML
     └── appendChild()
+
+
+
+
+
+
+// Define ref function to create reactive references
+function ref(initialValue) {
+  return {
+    value: initialValue,
+  };
+}
+
+// Define computed function to create reactive computed properties
+function computed(getter) {
+  return {
+    get value() {
+      return getter();
+    }
+  };
+}
+
+// Define defineStore function to create a store with id
+function defineStore(id, setup) {
+  console.log(`Creating store with id: ${id}`);
+  const store = setup();
+  store._id = id; // Attach the id to the store for reference
+  return store;
+}
+
+// Define the counter store using the ref and computed functions
+const useCounterStore = defineStore('counter', () => {
+  const count = ref(0);
+  const doubleCount = computed(() => count.value * 2);
+
+  function increment() {
+    count.value++;
+  }
+
+  return { count, doubleCount, increment };
+});
+
+// Usage example
+const counterStore = useCounterStore;
+console.log(`Store ID: ${counterStore._id}`); // Output: "Store ID: counter"
+console.log(counterStore.count.value); // Output: 0
+console.log(counterStore.doubleCount.value); // Output: 0
+counterStore.increment();
+console.log(counterStore.count.value); // Output: 1
+console.log(counterStore.doubleCount.value); // Output: 2
+
+
+getter method:
+const person = {
+  firstName: 'John',
+  lastName: 'Doe',
+  // Getter method
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+};
+
+console.log(person.fullName); // Access like a property
+
+vs normal method
+const person = {
+  firstName: 'John',
+  lastName: 'Doe',
+  // Regular method
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+};
+
+console.log(person.getFullName()); // Must call as a function
+
+

@@ -1,4 +1,8 @@
 const about = {
-    render: () => `<h2>About</h2>`
+    render: () => `
+    <template id="template-route">
+    <h2>About</h2>
+    </template>`
+
 }
 export default about
