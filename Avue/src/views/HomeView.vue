@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useCounterStore } from '@/stores/counter'
+import { useCounterStoreComp } from '@/stores/counter'
 import TheWelcome from '../components/TheWelcome.vue'
 
-const counter = useCounterStore()
+const counter = useCounterStoreComp()
 
 </script>
 
