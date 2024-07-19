@@ -4,12 +4,10 @@ class RouterView extends HTMLElement {
     }
 
     connectedCallback() {
-        this.innerHTML = `
-        <template id="template-rv">
+        const template = document.createElement('template')
+        template.innerHTML = `
            <div id="container"></div>
-        </template>
         `
-        const template = document.querySelector('#template-rv')
         let clone = template.content.cloneNode(true)
         this.appendChild(clone)
     }

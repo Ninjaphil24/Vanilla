@@ -19,78 +19,65 @@ HTMLElement (Web Components)
     └── appendChild()
 
 
+home.js
 
+import { useCounterStore } from '../store/counter.js';
+const counter = useCounterStore
 
+const home = {
+    render: () => {
+        // Create a temporary container to hold the template
+        const container = document.createElement('div');
+        container.innerHTML = `
+        <template id="template-route">
+            <h2>Home</h2>
+            <p>Counter: <span id="counter-value">${counter.count.value}</span></p>
+            <p>Counter computed: <span id="counter-computed-value">${counter.doubleCount.value}</span></p>
+            <button id="increment-button">Increment</button>
+        </template>`;
 
+        // Get the template content and clone it
+        const template = container.querySelector('#template-route');
+        const clone = template.content.cloneNode(true);
 
-// Define ref function to create reactive references
-function ref(initialValue) {
-  return {
-    value: initialValue,
-  };
-}
+        // Attach event listener to the button
+        const incrementButton = clone.querySelector('#increment-button');
+        if (incrementButton) {
+            incrementButton.addEventListener('click', () => {
+                counter.increment();
+                home.update();
+            });
+        }
 
-// Define computed function to create reactive computed properties
-function computed(getter) {
-  return {
-    get value() {
-      return getter();
+        return clone;
+    },
+    update: () => {
+        document.getElementById('counter-value').textContent = counter.count.value;
+        document.getElementById('counter-computed-value').textContent = counter.doubleCount.value;
     }
-  };
-}
-
-// Define defineStore function to create a store with id
-function defineStore(id, setup) {
-  console.log(`Creating store with id: ${id}`);
-  const store = setup();
-  store._id = id; // Attach the id to the store for reference
-  return store;
-}
-
-// Define the counter store using the ref and computed functions
-const useCounterStore = defineStore('counter', () => {
-  const count = ref(0);
-  const doubleCount = computed(() => count.value * 2);
-
-  function increment() {
-    count.value++;
-  }
-
-  return { count, doubleCount, increment };
-});
-
-// Usage example
-const counterStore = useCounterStore;
-console.log(`Store ID: ${counterStore._id}`); // Output: "Store ID: counter"
-console.log(counterStore.count.value); // Output: 0
-console.log(counterStore.doubleCount.value); // Output: 0
-counterStore.increment();
-console.log(counterStore.count.value); // Output: 1
-console.log(counterStore.doubleCount.value); // Output: 2
-
-
-getter method:
-const person = {
-  firstName: 'John',
-  lastName: 'Doe',
-  // Getter method
-  get fullName() {
-    return `${this.firstName} ${this.lastName}`;
-  }
 };
 
-console.log(person.fullName); // Access like a property
-
-vs normal method
-const person = {
-  firstName: 'John',
-  lastName: 'Doe',
-  // Regular method
-  getFullName() {
-    return `${this.firstName} ${this.lastName}`;
-  }
-};
-
-console.log(person.getFullName()); // Must call as a function
+export default home;
 
 
+index.js
+
+import home from '../views/home.js'
+import about from '../views/about.js'
+import { useCounterStore } from '../store/counter.js'
+const counter = useCounterStore
+// container.innerHTML = home
+const routes = {
+    '/': home,
+    '/about': about
+}
+
+function router() {
+    let container = document.getElementById('container');
+    let path = window.location.hash.replace('#', '') || '/';
+    let content = routes[path];
+    // container.innerHTML = '';  // Clear the container
+    container.appendChild(content.render());
+}
+
+export default router

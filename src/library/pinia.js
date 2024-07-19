@@ -3,3 +3,5 @@ function defineStore(id, storeSetup) {
     store._id = id
     return store
 }
+
+export { defineStore }

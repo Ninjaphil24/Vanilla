@@ -6,7 +6,8 @@ class HelloWorld extends HTMLElement {
 
     connectedCallback() {
         const msg = this.getAttribute('msg') || 'Add msg'
-        this.innerHTML = `
+        const template = document.createElement('template')
+        template.innerHTML = `
         <style>
             #hw {
                 font-size: 40px;
@@ -14,11 +15,10 @@ class HelloWorld extends HTMLElement {
                 padding: 0 10px;
             }
         </style>
-        <template id="template-hw">
-            <div id="hw">${msg}</div>
-        </template>
+        <div id="hw">${msg}</div>
+        
     `
-        const template = document.querySelector('#template-hw')
+
         let clone = template.content.cloneNode(true)
         this.appendChild(clone)
     }
