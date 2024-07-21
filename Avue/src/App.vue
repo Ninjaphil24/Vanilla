@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { useConfigStore } from './stores/config';
+
+const configStore = useConfigStore()
 </script>
 
 <template>
@@ -14,6 +17,9 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
+      <button @click="configStore.toggleAPI">
+        Current API: {{ configStore.useCompositionAPI ? 'Composition' : 'Options' }}
+      </button>
     </div>
   </header>
 

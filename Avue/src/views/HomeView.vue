@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { useCounterStoreComp } from '@/stores/counter'
 import TheWelcome from '../components/TheWelcome.vue'
+import { computed } from 'vue'
+import { useConfigStore } from '@/stores/config';
+import { useCounterStoreComp, useCounterStoreOpt } from '@/stores/counter'
 
-const counter = useCounterStoreComp()
+const configStore = useConfigStore()
+
+const counter = computed(() => configStore.useCompositionAPI ? useCounterStoreComp() : useCounterStoreOpt())
 
 </script>
 
