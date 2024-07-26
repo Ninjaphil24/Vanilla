@@ -9,16 +9,19 @@ function defineStore(id, storeSetup) {
     const getters = storeSetup.getters
     const actions = storeSetup.actions
 
-    console.log('state')
-    console.log(state)
-
     const store = {
         _id: id,
         ...state
     }
+    console.log('getters')
+    console.log(getters)
+    Object.defineProperty(store, 'doubleCount', {
+        get() {
+            return getters.doubleCount(store)
+        }
+    })
+
     store.increment = actions.increment.bind(store)
-    console.log('store')
-    console.log(store)
 
     return store
 

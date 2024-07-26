@@ -20,7 +20,6 @@ export const useCounterStore = defineStore('counterOpt', {
     actions: {
         increment() {
             this.count++
-            console.log("Opt")
         },
     },
 })
