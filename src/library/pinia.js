@@ -9,10 +9,19 @@ function defineStore(id, storeSetup) {
     const getters = storeSetup.getters
     const actions = storeSetup.actions
 
+    console.log('state')
+    console.log(state)
+
     const store = {
         _id: id,
-
+        ...state
     }
+    store.increment = actions.increment.bind(store)
+    console.log('store')
+    console.log(store)
+
+    return store
+
 }
 
 export { defineStore }
