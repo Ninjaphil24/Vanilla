@@ -12,7 +12,6 @@ const counter = computed(() => configStore.useCompositionAPI ? useCounterStoreCo
 
 <template>
   <main>
-    <TheWelcome />
     <p>Counter: {{ counter.count }}</p>
     <p>Counter computed: {{ counter.doubleCount }}</p>
     <button @click="counter.increment">Increment</button>
