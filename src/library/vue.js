@@ -12,4 +12,25 @@ function computed(getter) {
     }
 }
 
-export { ref, computed }
+function data(initVal) {
+    return new Proxy(initVal(), {
+        get(target, property) {
+            return target[property]
+        },
+        set(target, property, value) {
+            target[property] = value
+            return true
+        }
+    })
+}
+
+function createComponent(optionsObj) {
+    const state = data(optionsObj.data)
+    const methods = optionsObj.methods
+    for (let methodKey in methods) {
+        methods[methodKey] = methods[methodKey].bind(state)
+    }
+    return { state, methods }
+}
+
+export { ref, computed, createComponent }

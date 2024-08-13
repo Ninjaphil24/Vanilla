@@ -1,10 +1,12 @@
 import home from '../views/home.js'
 import about from '../views/about.js'
+import ReactiveView from '../views/ReactiveView.js'
 
 // container.innerHTML = home
 const routes = {
     '/': home,
-    '/about': about
+    '/about': about,
+    '/reactive': ReactiveView
 }
 
 function router() {
