@@ -1,4 +1,6 @@
 <script lang="ts">
+import { reactive, ref } from 'vue';
+
 export default {
     data() {
         return {
@@ -13,9 +15,32 @@ export default {
         toggleName() {
             this.nameBool = !this.nameBool
             this.nameBool ? this.user.name = "Phil" : this.user.name = "Philip"
+            console.log("Options Toggle")
+
             return this.user.name
         }
     }
+    // setup() {
+    //     const user = reactive({
+    //         name: "Phil",
+    //         city: "New York"
+    //     })
+
+    //     const nameBool = ref(true)
+
+    //     const toggleName = () => {
+    //         nameBool.value = !nameBool.value
+    //         nameBool.value ? user.name = "Phil" : user.name = "Philip"
+    //         console.log("Composition Toggle")
+    //         return user.name
+    //     }
+
+    //     return {
+    //         user,
+    //         nameBool,
+    //         toggleName
+    //     }
+    // }
 }
 </script>
 
