@@ -33,4 +33,16 @@ function createComponent(optionsObj) {
     return { state, methods }
 }
 
-export { ref, computed, createComponent }
+function reactive(initVal) {
+    return new Proxy(initVal, {
+        get(target, property) {
+            return target[property]
+        },
+        set(target, property, value) {
+            target[property] = value
+            return true
+        }
+    })
+}
+
+export { ref, computed, createComponent, reactive }

@@ -20,7 +20,6 @@ export default defineComponent({
 
         return {
             user,
-            nameBool,
             toggleName
         }
     }
