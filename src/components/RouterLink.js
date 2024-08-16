@@ -13,6 +13,7 @@ class RouterLink extends HTMLElement {
                 padding: 0 10px;
             }
         </style>
+           <a href="#/playground">Playground</a>
            <a href="#/">Home</a>
            <a href="#/about">About</a>
            <a href="#/reactive">Reactive</a>

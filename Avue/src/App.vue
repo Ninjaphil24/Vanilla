@@ -14,6 +14,7 @@ const configStore = useConfigStore()
       <HelloWorld msg="Hello World Prop" />
 
       <nav>
+        <RouterLink to="/playground">Playground</RouterLink>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/reactive">Reactive</RouterLink>
