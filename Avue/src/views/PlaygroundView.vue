@@ -8,7 +8,7 @@ export default defineComponent({
     computed: {
         currentComponent() {
             const configStore = useConfigStore()
-            return configStore.useCompositionAPI ? 'CompositionAPIComponent' : 'OptionsAPIComponent'
+            return configStore.useCompositionAPI ? 'CompPlayground' : 'OptPlayground'
         }
     },
     components: {

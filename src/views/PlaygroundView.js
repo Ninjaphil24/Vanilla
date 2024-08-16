@@ -8,59 +8,60 @@ console.log(useCompositionAPI.value)
 const optionsObj = createComponent({
     data() {
         return {
-            user: {
-                name: "Phil",
-                city: "New York"
-            },
-            nameBool: true
+            status: "status_one"
         }
     },
     methods: {
-        toggleName() {
-            this.nameBool = !this.nameBool
-            this.nameBool ? this.user.name = "Phil" : this.user.name = "Philip"
-            console.log("Options Toggle")
-            return this.user.name
+        setStatus(newStatus) {
+            this.status = newStatus
+            PlaygroundView.update()
+            console.log("Opt status")
         }
     }
 })
+
+window.setStatus = status => {
+    useCompositionAPI.value ? PlaygroundView.setupResult.setStatus(status) : optionsObj.methods.setStatus(status)
+}
+
 // Composition API style
 const PlaygroundView = {
     setupResult: null,
     setup() {
-        const user = reactive({
-            name: "Phil",
-            city: "New York"
-        })
+        const status = ref("status_one")
 
-        const nameBool = ref(true)
-
-        const toggleName = () => {
-            nameBool.value = !nameBool.value
-            nameBool.value ? user.name = "Phil" : user.name = "Philip"
-            console.log("Composition toggle")
-            return user.name
+        const setStatus = (newStatus) => {
+            status.value = newStatus
+            PlaygroundView.update()
+            console.log("Comp status")
         }
 
-        return {
-            user,
-            toggleName
-        }
+        return { status, setStatus }
     },
     render() {
         this.setupResult = this.setup()
-        const { user, toggleName } = this.setupResult
+        const { status, setStatus } = this.setupResult
         const template = document.createElement('template')
         template.innerHTML = `
         <h2>Playground</h2>
-        <h3 id="name">${useCompositionAPI.value ? user.name : optionsObj.state.user.name}</h3>
+        <h3 id="statusMsg">No Status</h3>
                 
-        <button id="toggleNameBtn">ToggleName</button>
+        <button id="setStatus1">Status One</button>
+        <button id="setStatus2">Status Two</button>
+        <button id="setStatus3" onclick="setStatus('status_three')">Status Three</button>
         `
         let clone = template.content.cloneNode(true)
-        const toggleNameBtn = clone.querySelector('#toggleNameBtn')
-        toggleNameBtn.addEventListener('click', () => {
-            useCompositionAPI.value ? toggleName() : optionsObj.methods.toggleName()
+
+        const setStatus1 = clone.querySelector('#setStatus1')
+        setStatus1.addEventListener('click', () => {
+            useCompositionAPI.value ? setStatus('status_one') : optionsObj.methods.setStatus('status_one')
+            PlaygroundView.update()
+
+        })
+
+        const setStatus2 = clone.querySelector('#setStatus2')
+        setStatus2.addEventListener('click', () => {
+            useCompositionAPI.value ? setStatus('status_two') : optionsObj.methods.setStatus('status_two')
             PlaygroundView.update()
 
         })
@@ -69,7 +70,16 @@ const PlaygroundView = {
         return clone
     },
     update() {
-        document.getElementById('name').innerHTML = useCompositionAPI.value ? this.setupResult.user.name : optionsObj.state.user.name
+        const statusMsg = document.getElementById('statusMsg')
+        if (useCompositionAPI.value) {
+            if (this.setupResult.status.value === "status_one") statusMsg.innerHTML = "Status One"
+            else if (this.setupResult.status.value === "status_two") statusMsg.innerHTML = "Status Two"
+            else if (this.setupResult.status.value === "status_three") statusMsg.innerHTML = "Status Three"
+        } else {
+            if (optionsObj.state.status === "status_one") statusMsg.innerHTML = "Status One"
+            else if (optionsObj.state.status === "status_two") statusMsg.innerHTML = "Status Two"
+            else if (optionsObj.state.status === "status_three") statusMsg.innerHTML = "Status Three"
+        }
     }
 }
 
