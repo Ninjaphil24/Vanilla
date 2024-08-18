@@ -8,7 +8,8 @@ console.log(useCompositionAPI.value)
 const optionsObj = createComponent({
     data() {
         return {
-            status: "status_one"
+            status: "status_one",
+            showHideBool: true
         }
     },
     methods: {
@@ -16,6 +17,21 @@ const optionsObj = createComponent({
             this.status = newStatus
             PlaygroundView.update()
             console.log("Opt status")
+        },
+        showHideFunc(showHide) {
+            this.showHideBool = !this.showHideBool
+            this.showHideBool ? showHide.style.display = 'block' : showHide.style.display = 'none'
+            console.log('Show/Hide Opt')
+        },
+        eventClicker(event) {
+            console.log("Options: " + event.type)
+        },
+        eventKeydown: (event) => {
+            if (event.key === 'Enter') console.log("Options: " + event.type)
+        },
+        eventKeydownOutput: (event, output) => {
+            console.log("Options Output")
+            output.innerHTML += event.key
         }
     }
 })
@@ -36,11 +52,32 @@ const PlaygroundView = {
             console.log("Comp status")
         }
 
-        return { status, setStatus }
+        const showHideBool = ref(true)
+        const showHideFunc = (showHide) => {
+            showHideBool.value = !showHideBool.value
+            showHideBool.value ? showHide.style.display = 'block' : showHide.style.display = 'none'
+            console.log(showHideBool.value)
+            console.log("Show/Hide Comp")
+        }
+
+        const eventClicker = (event) => {
+            console.log("Composition: " + event.type)
+        }
+
+        const eventKeydown = (event) => {
+            if (event.key === 'Enter') console.log("Composition: " + event.type)
+        }
+
+        const eventKeydownOutput = (event, output) => {
+            console.log("Composition Output")
+            output.innerHTML += event.key
+        }
+
+        return { status, setStatus, showHideFunc, eventClicker, eventKeydown, eventKeydownOutput }
     },
     render() {
         this.setupResult = this.setup()
-        const { status, setStatus } = this.setupResult
+        const { status, setStatus, showHideFunc, eventClicker, eventKeydown, eventKeydownOutput } = this.setupResult
         const template = document.createElement('template')
         template.innerHTML = `
         <h2>Playground</h2>
@@ -49,6 +86,15 @@ const PlaygroundView = {
         <button id="setStatus1">Status One</button>
         <button id="setStatus2">Status Two</button>
         <button id="setStatus3" onclick="setStatus('status_three')">Status Three</button>
+        <br><br>
+        <h3 id="showHide">Show me/Hide</h3>
+        <button id="showHideBtn">Show/Hide</button>
+        <br><br>
+        <button id="eventClick">Event Click</button>
+        <br><br>
+        <input id="keyDownEvent" placeholder="Press Enter">
+        <br><br>
+        <h3 id="keydownEventOutput"></h3>
         `
         let clone = template.content.cloneNode(true)
 
@@ -65,7 +111,33 @@ const PlaygroundView = {
             PlaygroundView.update()
 
         })
+        // Show Hide 
+        const showHideBtn = clone.querySelector('#showHideBtn')
+        const showHide = clone.querySelector('#showHide')
+        showHideBtn.addEventListener('click', () => {
+            useCompositionAPI.value ? showHideFunc(showHide) : optionsObj.methods.showHideFunc(showHide)
+        })
 
+        // Event Object
+        const eventClickString = 'click'
+        const eventClick = clone.querySelector('#eventClick')
+        eventClick.addEventListener(eventClickString, () => {
+            useCompositionAPI.value ? eventClicker(event) : optionsObj.methods.eventClicker(event)
+        })
+
+        const eventKeyDownEnter = 'keydown'
+        const keydownInput = clone.querySelector('#keyDownEvent')
+        const keydownEventOutput = clone.querySelector('#keydownEventOutput')
+
+        keydownInput.addEventListener(eventKeyDownEnter, (event) => {
+            if (useCompositionAPI.value) {
+                eventKeydown(event)
+                eventKeydownOutput(event, keydownEventOutput)
+            } else {
+                optionsObj.methods.eventKeydown(event)
+                optionsObj.methods.eventKeydownOutput(event, keydownEventOutput)
+            }
+        })
 
         return clone
     },
