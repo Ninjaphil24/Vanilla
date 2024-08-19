@@ -8,7 +8,8 @@ export default defineComponent({
             status: "none",
             showHideBool: true,
             event: 'click',
-            output: ''
+            output: '',
+            colorBool: true
         }
     },
     methods: {
@@ -27,6 +28,10 @@ export default defineComponent({
         keyPressed: (event: Event) => {
             console.log("Options: " + event.type)
 
+        },
+        colorChangeFunc() {
+            this.colorBool = !this.colorBool
+            console.log("Opt Color")
         }
     }
 })
@@ -53,4 +58,7 @@ export default defineComponent({
     <input v-on:keydown="keyPressed" v-model="output" placeholder="Press any key here">
     <br><br>
     <h3>{{ output }}</h3>
+    <br><br>
+    <button @click="colorChangeFunc" v-bind:style="{ color: colorBool ? 'red' : 'blue' }">Red or Blue</button>
+
 </template>

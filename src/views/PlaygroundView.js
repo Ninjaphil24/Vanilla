@@ -9,7 +9,8 @@ const optionsObj = createComponent({
     data() {
         return {
             status: "status_one",
-            showHideBool: true
+            showHideBool: true,
+            colorBool: true
         }
     },
     methods: {
@@ -32,6 +33,11 @@ const optionsObj = createComponent({
         eventKeydownOutput: (event, output) => {
             console.log("Options Output")
             output.innerHTML += event.key
+        },
+        colorChangeFunc(element) {
+            this.colorBool = !this.colorBool
+            this.colorBool ? element.style.color = 'red' : element.style.color = 'blue'
+            console.log("Opt Color")
         }
     }
 })
@@ -73,11 +79,20 @@ const PlaygroundView = {
             output.innerHTML += event.key
         }
 
-        return { status, setStatus, showHideFunc, eventClicker, eventKeydown, eventKeydownOutput }
+        let colorBool = ref(true)
+
+        const colorChangeFunc = (element) => {
+            colorBool.value = !colorBool.value
+            colorBool.value ? element.style.color = 'red' : element.style.color = 'blue'
+            console.log("Comp Color")
+        }
+
+
+        return { status, setStatus, showHideFunc, eventClicker, eventKeydown, eventKeydownOutput, colorChangeFunc }
     },
     render() {
         this.setupResult = this.setup()
-        const { status, setStatus, showHideFunc, eventClicker, eventKeydown, eventKeydownOutput } = this.setupResult
+        const { status, setStatus, showHideFunc, eventClicker, eventKeydown, eventKeydownOutput, colorChangeFunc } = this.setupResult
         const template = document.createElement('template')
         template.innerHTML = `
         <h2>Playground</h2>
@@ -95,6 +110,8 @@ const PlaygroundView = {
         <input id="keyDownEvent" placeholder="Press Enter">
         <br><br>
         <h3 id="keydownEventOutput"></h3>
+        <br><br>
+        <button id="colorChange">Red or Blue</button>
         `
         let clone = template.content.cloneNode(true)
 
@@ -137,6 +154,13 @@ const PlaygroundView = {
                 optionsObj.methods.eventKeydown(event)
                 optionsObj.methods.eventKeydownOutput(event, keydownEventOutput)
             }
+        })
+
+        // v-bind imitation
+        const colorChange = clone.querySelector('#colorChange')
+        colorChange.style.color = 'red'
+        colorChange.addEventListener('click', () => {
+            useCompositionAPI.value ? colorChangeFunc(colorChange) : optionsObj.methods.colorChangeFunc(colorChange)
         })
 
         return clone
