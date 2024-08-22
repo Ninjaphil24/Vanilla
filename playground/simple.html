@@ -9,6 +9,7 @@
 
 <body>
     <div id="parent"></div>
+    <button id="textChangeBtn">Change Btn Text</button>
 </body>
 
 <script>
@@ -19,12 +20,45 @@
     function render(vNode) {
         // console.log(vNode)
         const $el = document.createElement(vNode.tag)
-        Object.keys(vNode.props).forEach(key => Object.assign($el.style, vNode.props[key]))
-        console.log($el)
-        console.log(vNode.children[0])
+        Object.keys(vNode.props.style).forEach(key => $el.style[key] = vNode.props.style[key])
+        // console.log($el)
+        // console.log(vNode.children[0])
         $el.appendChild(document.createTextNode(vNode.children))
         return $el
 
+    }
+
+    let state = {
+        btncolor: 'red',
+        btntext: 'Button'
+    }
+
+    function colorClick() {
+        const newColor = state.btncolor === 'red' ? 'blue' : 'red'
+        diffing(parent, { btncolor: newColor })
+    }
+
+    function textChangeClick() {
+        const newText = state.btntext === 'Button' ? 'Clicked' : 'Button'
+        diffing(parent, { btntext: newText })
+
+    }
+
+    function diffing(parent, newState) {
+        state = { ...state, ...newState }
+        const newVNode = app()
+        $el = parent.childNodes[0]
+
+        Object.keys(vNode.props.style).forEach(key => {
+            // console.log("No Change and mount")
+            if ($el.style[key] != newVNode.props.style[key]) {
+                $el.style[key] = newVNode.props.style[key]
+                // console.log("Change and mount")
+            }
+        })
+        if ($el.textContent != newVNode.children[0]) {
+            $el.textContent = newVNode.children[0]
+        }
     }
 
     function app() {
@@ -34,7 +68,7 @@
             // props
             {
                 style: {
-                    backgroundColor: 'red',
+                    backgroundColor: state.btncolor,
                     width: '100px',
                     height: '35px',
                     fontSize: '20px',
@@ -42,16 +76,20 @@
                 }
             },
             // children (innerHTML)
-            "Button")
+            state.btntext)
         // <button style:"backgroundcolor = red;">Button</button>
     }
 
     const vNode = app()
-    console.log(vNode)
+    // console.log(vNode)
     const parent = document.getElementById('parent')
     parent.appendChild(render(vNode))
 
+    const button = document.getElementsByTagName('button')[0]
+    button.addEventListener('click', colorClick)
 
+    const textChangeBtn = document.getElementById('textChangeBtn')
+    textChangeBtn.addEventListener('click', textChangeClick)
 </script>
 
 </html>
