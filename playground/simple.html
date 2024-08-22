@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="parent"></div>
+</body>
+
+<script>
+    function h(tag, props, ...children) {
+        return { tag, props, children }
+    }
+
+    function render(vNode) {
+        // console.log(vNode)
+        const $el = document.createElement(vNode.tag)
+        Object.keys(vNode.props).forEach(key => Object.assign($el.style, vNode.props[key]))
+        console.log($el)
+        console.log(vNode.children[0])
+        $el.appendChild(document.createTextNode(vNode.children))
+        return $el
+
+    }
+
+    function app() {
+        return h(
+            // tag
+            'button',
+            // props
+            {
+                style: {
+                    backgroundColor: 'red',
+                    width: '100px',
+                    height: '35px',
+                    fontSize: '20px',
+                    color: 'white'
+                }
+            },
+            // children (innerHTML)
+            "Button")
+        // <button style:"backgroundcolor = red;">Button</button>
+    }
+
+    const vNode = app()
+    console.log(vNode)
+    const parent = document.getElementById('parent')
+    parent.appendChild(render(vNode))
+
+
+</script>
+
+</html>
