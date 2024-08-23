@@ -26,6 +26,11 @@ const router = createRouter({
       path: '/playground',
       name: 'playground',
       component: () => import('../views/PlaygroundView.vue')
+    },
+    {
+      path: '/vbind',
+      name: 'vbind',
+      component: () => import('../views/VBindView.vue')
     }
   ]
 })

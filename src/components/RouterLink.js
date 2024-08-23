@@ -17,6 +17,7 @@ class RouterLink extends HTMLElement {
            <a href="#/">Home</a>
            <a href="#/about">About</a>
            <a href="#/reactive">Reactive</a>
+           <a href="#/vbind">VBind</a>
         `
         let clone = template.content.cloneNode(true)
         this.appendChild(clone)
