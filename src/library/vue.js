@@ -26,11 +26,19 @@ function data(initVal) {
 
 function createComponent(optionsObj) {
     const state = data(optionsObj.data)
+
+    const computedProperties = {}
+    if (optionsObj.computed) {
+        for (let key in optionsObj.computed) {
+            computedProperties[key] = computed(optionsObj.computed[key].bind(state))
+        }
+    }
+
     const methods = optionsObj.methods
     for (let methodKey in methods) {
         methods[methodKey] = methods[methodKey].bind(state)
     }
-    return { state, methods }
+    return { state, computed: computedProperties, methods }
 }
 
 function reactive(initVal) {
