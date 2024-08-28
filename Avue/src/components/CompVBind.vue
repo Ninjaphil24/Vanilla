@@ -11,6 +11,7 @@ export default defineComponent({
             role: "user", // or user or guest
             onLine: true
         })
+        let isRed = ref(true)
         let profileStyle = computed(() => {
             return {
                 border: user.onLine === true ? '2px solid green' : '2px solid gray',
@@ -19,9 +20,16 @@ export default defineComponent({
 
             }
         })
+        function toggleColorFunc() {
+            isRed.value = !isRed.value
+            console.log("Comp Color Change")
+        }
 
+        let textStyle = computed(() => {
+            return user.role == 'admin' ? 'bold' : 'italic'
+        })
 
-        return { linkURL, linkTitle, user, profileStyle }
+        return { linkURL, linkTitle, user, profileStyle, isRed, toggleColorFunc, textStyle }
     }
 
 })
@@ -36,4 +44,28 @@ export default defineComponent({
     <div :style="profileStyle">
         <h2>{{ user.name }}</h2>
     </div>
+    <button @click="toggleColorFunc">Toggle Color</button>
+    <div id="toggleText" :class="[{ red: isRed, yellow: !isRed }, 'font-size', textStyle]">Text</div>
 </template>
+
+<style scoped>
+.red {
+    color: red;
+}
+
+.yellow {
+    color: yellow;
+}
+
+.font-size {
+    font-size: 30px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+</style>

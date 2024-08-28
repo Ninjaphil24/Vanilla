@@ -9,9 +9,10 @@ export default defineComponent({
             linkTitle: "Opt Link",
             user: {
                 name: "Phil",
-                role: "admin", // or user or guest
+                role: "guest", // or user or guest
                 onLine: false
-            }
+            },
+            isRed: true
         }
     },
     computed: {
@@ -22,9 +23,17 @@ export default defineComponent({
                 fontWeight: this.user.role === 'admin' ? 'bold' : 'normal'
 
             }
+        },
+
+        textStyle() {
+            return this.user.role == 'admin' ? 'bold' : 'italic'
         }
     },
     methods: {
+        toggleColorFunc() {
+            this.isRed = !this.isRed
+            console.log("Opt Color Change")
+        }
     }
 })
 </script>
@@ -37,4 +46,28 @@ export default defineComponent({
     <div :style="profileStyle">
         <h2>{{ user.name }}</h2>
     </div>
+    <button @click="toggleColorFunc">Toggle Color</button>
+    <div id="toggleText" :class="[{ red: isRed, yellow: !isRed }, 'font-size', textStyle]">Text</div>
 </template>
+
+<style scoped>
+.red {
+    color: red;
+}
+
+.yellow {
+    color: yellow;
+}
+
+.font-size {
+    font-size: 30px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+</style>
