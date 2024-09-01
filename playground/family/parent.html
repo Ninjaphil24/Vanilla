@@ -11,8 +11,16 @@
 <body>
     <div class="first">Hello</div>
     <div id="unique1">Hello Again</div>
+    <div id="unique2"></div>
+    <div id="unique3"></div>
 </body>
 
 <script src="script.js"></script>
+<script>
+    const slot1 = document.getElementsByClassName('slot')[0]
+    slot1.textContent = "I am slot 1"
+    const slot2 = document.getElementsByClassName('slot')[1]
+    slot2.textContent = "I am slot 2"
+</script>
 
 </html>
