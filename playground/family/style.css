@@ -1,11 +1,23 @@
-.second {
-    color: orange;
+#unique {
+    border: 2px solid red;
+}
+
+.outer {
+    padding: 10px;
+}
+
+.inner {
+    padding: 10px;
+}
+
+.slot {
     margin-top: 20px;
     font-size: 40px;
 }
 
-.slotStyle {
-    color: blue;
-    margin-top: 20px;
-    font-size: 40px;
+.btn {
+    height: 30px;
+    width: 80px;
+    font-size: 20px;
+    cursor: pointer;
 }
