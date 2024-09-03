@@ -31,6 +31,11 @@ const router = createRouter({
       path: '/vbind',
       name: 'vbind',
       component: () => import('../views/VBindView.vue')
+    },
+    {
+      path: '/parent',
+      name: 'parent',
+      component: () => import('../views/ParentView.vue')
     }
   ]
 })
