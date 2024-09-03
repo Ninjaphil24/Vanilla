@@ -19,7 +19,8 @@ const configStore = useConfigStore()
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/reactive">Reactive</RouterLink>
         <RouterLink to="/vbind">VBind</RouterLink>
-        <RouterLink to="/parent">Parent</RouterLink>
+        <RouterLink to="/parentopt">ParentOpt</RouterLink>
+        <RouterLink to="/parentcomp">ParentComp</RouterLink>
       </nav>
       <button @click="configStore.toggleAPI">
         Current API: {{ configStore.useCompositionAPI ? 'Composition' : 'Options' }}

@@ -33,9 +33,14 @@ const router = createRouter({
       component: () => import('../views/VBindView.vue')
     },
     {
-      path: '/parent',
-      name: 'parent',
-      component: () => import('../views/ParentView.vue')
+      path: '/parentopt',
+      name: 'parentopt',
+      component: () => import('../views/ParentOptView.vue')
+    },
+    {
+      path: '/parentcomp',
+      name: 'parentcomp',
+      component: () => import('../views/ParentCompView.vue')
     }
   ]
 })

@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 
 export default defineComponent({
     props: {
@@ -38,11 +38,17 @@ export default defineComponent({
             required: true
         }
     },
-    methods: {
-        btnClick() {
-            alert(`Slot ${this.btnText} Opt`)
+    setup(props) {
+
+        const { outerBg, innerBg, slotColor, btnColor, btnFont, btnText } = toRefs(props)
+
+        function btnClick() {
+            alert(`Slot ${btnText.value} Comp`)
         }
-    },
+
+        return { outerBg, innerBg, slotColor, btnColor, btnFont, btnText, btnClick }
+
+    }
 })
 </script>
 
