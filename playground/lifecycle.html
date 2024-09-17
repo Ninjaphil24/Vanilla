@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Cycles</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let myDiv = document.getElementById('myDiv')
+            myDiv.innerHTML = "DOM before full load"
+
+            let inputText = localStorage.getItem('inputText')
+            let inputTag = document.getElementsByTagName('input')
+
+            if (inputText) {
+                inputTag[0].value = inputText
+            }
+        })
+
+
+    </script>
+    <style>
+        #myDiv {
+            font-size: 20px;
+            color: red;
+        }
+
+        #myDiv.loaded {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="myDiv"></div>
+    <img src="https://placehold.co/4000x4000" alt="" width="600px">
+    <input type="text"> <br>
+    <div id="time"></div>
+
+    <script>
+        let startTime
+        window.addEventListener('load', (e) => {
+            console.log(e)
+            myDiv.innerHTML = "DOM after full load"
+            myDiv.classList.add('loaded')
+            startTime = Date.now()
+        })
+
+        window.onpageshow = (e) => {
+            console.log(e)
+            if (e.persisted) {
+                console.log("From bfcache")
+                let timeStamp = sessionStorage.getItem("Time")
+                document.querySelector("#time").innerHTML = `Last visit: ${timeStamp}`
+            }
+        }
+
+        window.onpagehide = (e) => {
+            let now = new Date().toLocaleTimeString()
+            sessionStorage.setItem("Time", now)
+        }
+
+        window.addEventListener('beforeunload', (e) => {
+            let inputTag = document.getElementsByTagName('input')
+            const timeSpent = Date.now() - startTime
+
+            navigator.sendBeacon("http://localhost:3000/time", JSON.stringify({ timeSpent }))
+
+            if (inputTag[0].value != "") {
+                localStorage.setItem("inputText", inputTag[0].value)
+            } else if (inputTag[0].value === "") {
+                localStorage.clear()
+            }
+            e.preventDefault()
+            e.returnValue = '' // or true
+        })
+
+    </script>
+</body>
+
+</html>
