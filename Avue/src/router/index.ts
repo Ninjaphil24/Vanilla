@@ -41,7 +41,12 @@ const router = createRouter({
       path: '/parentcomp',
       name: 'parentcomp',
       component: () => import('../views/ParentCompView.vue')
-    }
+    },
+    {
+      path: '/lifecycle',
+      name: 'lifecycle',
+      component: () => import('../views/LifeCycleView.vue')
+    },
   ]
 })
 
