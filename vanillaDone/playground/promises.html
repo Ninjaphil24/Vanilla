@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>Event Loop</div><br><br>
+    <div id="inject"></div>
+    <script>
+        const div = document.getElementById('inject')
+        function createContent() {
+            console.log("Hello")
+            div.innerHTML += "Direct <br>"
+        }
+
+        function timeout() {
+            setTimeout(() => {
+                div.innerHTML += "Task Queue<br>"
+            }, 0)
+        }
+
+        function promise() {
+            const prom = new Promise((resolve, reject) => {
+                div.innerHTML += "Direct from Promise<br>"
+                resolve("(Resolution Injection)")
+            })
+            setTimeout(() => {
+                div.innerHTML += "Task Queue within promise()<br>"
+            }, 0)
+            prom.then((injection) => {
+                div.innerHTML += `MicroTask Queue ${injection}<br>`
+            })
+        }
+
+        async function asyncPromiseFunc() {
+            div.innerHTML += "Direct Queue within async<br>"
+            await new Promise(res => {
+                div.innerHTML += `Direct Queue from Await<br>`
+            })
+            return "Async Done"
+        }
+
+        timeout()
+        promise()
+        timeout()
+        asyncPromiseFunc().then((injection) => {
+            div.innerHTML += `MicroTask Queue ${injection}<br>`
+        })
+        createContent()
+        createContent()
+
+
+    </script>
+</body>
+
+</html>
