@@ -53,6 +53,23 @@
         createContent()
         createContent()
 
+        console.log("Permissions: " + Notification.permission)
+        console.log(Notification.requestPermission().then(() => {
+            if (Notification.permission == "granted") {
+                const n = new Notification("To do list", { body: "This is the body.", icon: "https://via.placeholder.com/128" });
+
+                document.addEventListener("visibilitychange", () => {
+                    if (document.visibilityState === "visible") {
+                        // The tab has become visible so clear the now-stale Notification.
+                        n.close();
+                    }
+                });
+            }
+            return "Done"
+        }))
+
+
+
 
     </script>
 </body>
