@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+</head>
+
+<body>
+    <h1>Client File</h1>
+    <div>.then</div><br>
+    <div id="thenDiv"></div><br>
+    <div>async</div><br>
+    <div id="asyncDiv"></div>
+    <script>
+        let thenDiv = document.getElementById('thenDiv')
+        let asyncDiv = document.getElementById('asyncDiv')
+
+        fetch('http://localhost:3000/users')
+            .then(function (response) {
+                return response.json()
+            }).then(function (data) {
+                data.forEach(element => {
+                    thenDiv.innerHTML += element.user + "<br>"
+                });
+            })
+
+        async function fetcher() {
+            const response = await fetch('http://localhost:3000/users')
+            const data = await response.json()
+            data.forEach(element => {
+                asyncDiv.innerHTML += element.user + "<br>"
+            });
+        }
+        fetcher()
+    </script>
+</body>
+
+</html>
