@@ -14,11 +14,11 @@ server.use((req, res, next) => {
     next();
 });
 
-// const secretKey = "my_secret_key"
+const secretKey = "my_secret_key"
 // const expiresIn = { expiresIn: "1h"}
 
 function createjwt(payload) {
-    return jwt.sign(payload, "my_secret_key", { expiresIn: "1h" })
+    return jwt.sign(payload, secretKey, { expiresIn: "1h" })
 }
 
 server.post('/login', (req, res) => {
@@ -31,6 +31,26 @@ server.post('/login', (req, res) => {
         return res.json({ token })
     } else {
         return res.json({ message: "Login failed" })
+    }
+})
+
+server.use(/^(?!\/login).*$/, (req, res) => {
+    const auth = req.headers.authorization
+    console.log(auth)
+    if (!auth) {
+        return res.json({ message: "No Authorization Token exists! Log in to create one!" })
+    } else {
+        try {
+            const token = auth.split(' ')[1]
+            jwt.verify(token, secretKey)
+            const { username, password } = req.body
+            console.log(username, password)
+            const db = router.db
+            const user = db.get('users').find({ user: username, password: password }).value()
+            return res.json({ username })
+        } catch (err) {
+            return res.json({ Error: err })
+        }
     }
 })
 
