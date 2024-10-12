@@ -10,8 +10,13 @@ server.use(jsonServer.bodyParser)
 server.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // Allow any origin
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    console.log(req.method)
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200)
+    } else {
+        next();
+    }
 });
 
 const secretKey = "my_secret_key"
