@@ -30,7 +30,7 @@ server.post('/login', (req, res) => {
     const { username, password } = req.body
     console.log(username, password)
     const db = router.db
-    const user = db.get('users').find({ user: username, password: password }).value()
+    const user = db.get('users').find({ username: username, password: password }).value()
     if (user) {
         const token = createjwt(user)
         return res.json({ token })
@@ -47,12 +47,13 @@ server.use(/^(?!\/login).*$/, (req, res) => {
     } else {
         try {
             const token = auth.split(' ')[1]
-            jwt.verify(token, secretKey)
-            const { username, password } = req.body
+            const decoded = jwt.verify(token, secretKey)
+            console.log(decoded)
+            const { username, password } = decoded
             console.log(username, password)
             const db = router.db
-            const user = db.get('users').find({ user: username, password: password }).value()
-            return res.json({ username })
+            const user = db.get('users').find({ username: username, password: password }).value()
+            return res.json({ user })
         } catch (err) {
             return res.json({ Error: err })
         }

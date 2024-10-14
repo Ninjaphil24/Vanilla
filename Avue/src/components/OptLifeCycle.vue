@@ -5,8 +5,10 @@ export default defineComponent({
     name: 'OptLifeCycle',
     data() {
         return {
+            loggedInUser: '',
             username: 'Jonathan Doe',
             password: '12345',
+            loggedIn: false
         }
     },
     methods: {
@@ -23,26 +25,35 @@ export default defineComponent({
             }).then(response => response.json())
                 .then(data => {
                     localStorage.setItem('jwt', data.token)
+                    this.loggedIn = true
                 })
         }
     },
     beforeCreate() {
         const token = localStorage.getItem('jwt')
-        fetch('http://localhost:3000/', {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        }).then(response => response.json())
-            .then(data => {
-                console.log("Success with login")
-            })
+        if (token) {
+            fetch('http://localhost:3000/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.user.username) {
+                        this.loggedInUser = data.user.username
+                        this.loggedIn = true
+                    }
+                })
+        }
     },
 })
 </script>
 
 <template>
-    <form @submit.prevent="login">
-        <button type="submit">Login</button>
-    </form>
+    <h2 v-if="loggedIn">{{ loggedInUser }}</h2>
+    <div v-else>
+        <form @submit.prevent="login">
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </template>
