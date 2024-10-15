@@ -23,12 +23,11 @@ const secretKey = "my_secret_key"
 // const expiresIn = { expiresIn: "1h"}
 
 function createjwt(payload) {
-    return jwt.sign(payload, secretKey, { expiresIn: "1h" })
+    return jwt.sign(payload, secretKey, { expiresIn: "10m" })
 }
 
 server.post('/login', (req, res) => {
     const { username, password } = req.body
-    console.log(username, password)
     const db = router.db
     const user = db.get('users').find({ username: username, password: password }).value()
     if (user) {
@@ -41,16 +40,13 @@ server.post('/login', (req, res) => {
 
 server.use(/^(?!\/login).*$/, (req, res) => {
     const auth = req.headers.authorization
-    console.log(auth)
     if (!auth) {
         return res.json({ message: "No Authorization Token exists! Log in to create one!" })
     } else {
         try {
             const token = auth.split(' ')[1]
             const decoded = jwt.verify(token, secretKey)
-            console.log(decoded)
             const { username, password } = decoded
-            console.log(username, password)
             const db = router.db
             const user = db.get('users').find({ username: username, password: password }).value()
             return res.json({ user })

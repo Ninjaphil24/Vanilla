@@ -1,66 +1,110 @@
 <script lang="ts">
-import { ref, defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-    name: 'CompPlayground',
+    name: 'CompLifeCycle',
+
     setup() {
-        const status = ref("none")
+        const loggedInUser = ref('')
+        const loggedIn = ref(false)
+        const loading = ref(true)
+        async function tokenCheck() {
+            console.log("Comp Token")
+            const token = localStorage.getItem('jwt')
+            if (token) {
+                try {
+                    const response = await fetch('http://localhost:3000/', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    })
+                    const data = await response.json()
+                    if (data.user) {
+                        loggedInUser.value = data.user.username
+                        loggedIn.value = true
+                        loading.value = false
+                    } else if (data.Error) {
+                        loggedIn.value = false
+                        localStorage.removeItem('jwt')
+                    }
+                } catch (error) {
+                    console.log(error)
+                    loggedIn.value = false
+                    localStorage.removeItem('jwt')
+                }
 
-        const setStatus = (newStatus: string) => {
-            status.value = newStatus
-            console.log("Comp status")
+            } else {
+                loading.value = false
+                loggedIn.value = false
+            }
+        } // tokenCheck End
+
+        tokenCheck()
+
+        const username = ref('')
+        const password = ref('')
+
+        async function login() {
+            try {
+                console.log("Comp Fetch")
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username.value,
+                        password: password.value
+                    })
+                })
+
+                const data = await response.json()
+
+                localStorage.setItem('jwt', data.token)
+                loggedIn.value = true
+                loading.value = false
+                loggedInUser.value = username.value
+
+            } catch (error) {
+                console.log(error)
+                loggedIn.value = false
+                localStorage.removeItem('jwt')
+            }
+        } // login End
+
+        function logout() {
+            loggedIn.value = false
+            localStorage.removeItem('jwt')
         }
-        const showHideBool = ref(true)
-        const showHideFunc = () => {
-            showHideBool.value = !showHideBool.value
-            console.log("Show/Hide Comp")
+
+        return {
+            loading,
+            loggedInUser,
+            loggedIn,
+            tokenCheck,
+            username,
+            password,
+            login,
+            logout
         }
-
-        const event = ref('click')
-
-        const eventClicker = (event: Event) => {
-            console.log("Composition: " + event.type)
-        }
-
-        const keyPressed = (event: Event) => {
-            console.log("Composition: " + event.type)
-        }
-
-        const output = ref('')
-
-        let colorBool = ref(true)
-
-        const colorChangeFunc = () => {
-            colorBool.value = !colorBool.value
-            console.log("Comp Color")
-        }
-
-        return { status, setStatus, showHideFunc, showHideBool, eventClicker, event, keyPressed, output, colorChangeFunc, colorBool }
-    }
+    } // setup End
 })
 </script>
-<template>
-    <h3 v-if="status === 'none'">No Status</h3>
-    <h3 v-else-if="status === 'status_one'">Status One</h3>
-    <h3 v-else-if="status === 'status_two'">Status Two</h3>
-    <h3 v-else-if="status === 'status_three'">Status Three</h3>
-    <button @click="setStatus('status_one')">Status One</button>
-    <button @click="setStatus('status_two')">Status Two</button>
-    <button v-on:click="setStatus('status_three')">Status three</button>
-    <br><br>
-    <h3 v-show="showHideBool">Show/Hide</h3>
-    <button v-on:click="showHideFunc">Show/Hide</button>
-    <br><br>
-    <button v-on:[event]="eventClicker">Event Clicker</button>
-    <br><br>
-    <input v-on:keydown.enter="keyPressed" placeholder="Press Enter here">
-    <br><br>
-    <input @keydown.space="keyPressed" placeholder="Press Space here">
-    <br><br>
-    <input v-on:keydown="keyPressed" v-model="output" placeholder="Press any key here">
-    <br><br>
-    <h3>{{ output }}</h3>
-    <br><br>
-    <button @click="colorChangeFunc" v-bind:style="{ color: colorBool ? 'red' : 'blue' }">Red or Blue</button>
 
+<template>
+    <div v-if="loading">Loading...</div>
+    <div v-else-if="loggedIn">
+        <h2>{{ loggedInUser }}</h2>
+        <form @submit.prevent="logout">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+    <div v-else>
+        <form @submit.prevent="login">
+            <input type="text" v-model="username" placeholder="Username">
+            <input type="password" v-model="password" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </template>

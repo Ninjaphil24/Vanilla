@@ -5,14 +5,16 @@ export default defineComponent({
     name: 'OptLifeCycle',
     data() {
         return {
+            loading: true,
             loggedInUser: '',
-            username: 'Jonathan Doe',
-            password: '12345',
+            username: '',
+            password: '',
             loggedIn: false
         }
     },
     methods: {
         login() {
+            console.log("Opt Fetch")
             fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
@@ -26,10 +28,21 @@ export default defineComponent({
                 .then(data => {
                     localStorage.setItem('jwt', data.token)
                     this.loggedIn = true
+                    this.loading = false
+                    this.loggedInUser = this.username
+                }).catch(error => {
+                    console.log(error)
+                    this.loggedIn = false
+                    localStorage.removeItem('jwt')
                 })
+        },
+        logout() {
+            this.loggedIn = false
+            localStorage.removeItem('jwt')
         }
     },
     beforeCreate() {
+        console.log("Opt Token")
         const token = localStorage.getItem('jwt')
         if (token) {
             fetch('http://localhost:3000/', {
@@ -39,20 +52,46 @@ export default defineComponent({
                 }
             }).then(response => response.json())
                 .then(data => {
-                    if (data.user.username) {
+                    if (data.user) {
                         this.loggedInUser = data.user.username
+                        this.loading = false
                         this.loggedIn = true
+                    } else if (data.Error) {
+                        this.loading = false
+                        this.loggedIn = false
+                        localStorage.removeItem('jwt')
                     }
+                }).catch(error => {
+                    console.log(error)
+                    this.loggedIn = false
+                    localStorage.removeItem('jwt')
                 })
+        } else {
+            // setTimeout(() => {
+            //     this.loading = false
+            //     this.loggedIn = false
+            // }, 0)
+            Promise.resolve().then(() => {
+                this.loading = false
+                this.loggedIn = false
+            })
         }
     },
 })
 </script>
 
 <template>
-    <h2 v-if="loggedIn">{{ loggedInUser }}</h2>
+    <div v-if="loading">Loading...</div>
+    <div v-else-if="loggedIn">
+        <h2>{{ loggedInUser }}</h2>
+        <form @submit.prevent="logout">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
     <div v-else>
         <form @submit.prevent="login">
+            <input type="text" v-model="username" placeholder="Username">
+            <input type="password" v-model="password" placeholder="Password">
             <button type="submit">Login</button>
         </form>
     </div>
