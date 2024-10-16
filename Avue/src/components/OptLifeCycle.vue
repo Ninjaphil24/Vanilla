@@ -9,7 +9,8 @@ export default defineComponent({
             loggedInUser: '',
             username: '',
             password: '',
-            loggedIn: false
+            loggedIn: false,
+            darkMode: true,
         }
     },
     methods: {
@@ -39,6 +40,10 @@ export default defineComponent({
         logout() {
             this.loggedIn = false
             localStorage.removeItem('jwt')
+        },
+        toggleColor() {
+            this.darkMode = !this.darkMode
+            this.$emit("toggle", console.log("DarkMode: ", this.darkMode))
         }
     },
     beforeCreate() {

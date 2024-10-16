@@ -14,6 +14,17 @@ export default defineComponent({
     components: {
         CompLifeCycle,
         OptLifeCycle
+    },
+    methods: {
+        toggleFromParent() {
+            const componentToggle = this.$refs.currentComponent as any;
+            componentToggle.toggleColor()
+            // console.log("Refs Object: ")
+            // console.log(this.$refs)
+        },
+        receivedEmit() {
+
+        }
     }
 })
 </script>
@@ -21,7 +32,10 @@ export default defineComponent({
 <template>
     <div id="title">
         <h1>LifeCycle</h1>
-        <component :is="currentComponent"></component>
+        <component :is="currentComponent" ref="currentComponent" @toggle="receivedEmit"></component>
+    </div>
+    <div id="btn">
+        <button @click="toggleFromParent">Toggle</button>
     </div>
 </template>
 
