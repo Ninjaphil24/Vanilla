@@ -5,6 +5,11 @@ import CompLifeCycle from '@/components/CompLifeCycle.vue';
 import OptLifeCycle from '@/components/OptLifeCycle.vue';
 
 export default defineComponent({
+    data() {
+        return {
+            isDarkMode: true
+        }
+    },
     computed: {
         currentComponent() {
             const configStore = useConfigStore()
@@ -22,15 +27,16 @@ export default defineComponent({
             // console.log("Refs Object: ")
             // console.log(this.$refs)
         },
-        receivedEmit() {
-
+        receivedEmit(darkMode: boolean) {
+            console.log("Emitted darkMode: ", darkMode)
+            this.isDarkMode = darkMode
         }
     }
 })
 </script>
 
 <template>
-    <div id="title">
+    <div id="title" :class="isDarkMode ? 'darkBg' : 'lightBg'">
         <h1>LifeCycle</h1>
         <component :is="currentComponent" ref="currentComponent" @toggle="receivedEmit"></component>
     </div>
@@ -40,7 +46,13 @@ export default defineComponent({
 </template>
 
 <style scoped>
-#title {
-    background-color: var(--color-background-mute);
+.darkBg {
+    background-color: rgb(61, 60, 60);
+    color: aliceblue;
+}
+
+.lightBg {
+    background-color: aquamarine;
+    color: blue;
 }
 </style>

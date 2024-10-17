@@ -43,7 +43,8 @@ export default defineComponent({
         },
         toggleColor() {
             this.darkMode = !this.darkMode
-            this.$emit("toggle", console.log("DarkMode: ", this.darkMode))
+            this.$emit("toggle", this.darkMode)
+            this.darkMode ? localStorage.setItem('BG', 'dark') : localStorage.setItem('BG', 'light')
         }
     },
     beforeCreate() {
@@ -82,6 +83,13 @@ export default defineComponent({
             })
         }
     },
+    created() {
+        const bgState = localStorage.getItem('BG')
+        bgState === 'dark' ? this.darkMode = true : this.darkMode = false
+    },
+    beforeMount() {
+        this.$emit("toggle", this.darkMode)
+    }
 })
 </script>
 
