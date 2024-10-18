@@ -7,7 +7,8 @@ import OptLifeCycle from '@/components/OptLifeCycle.vue';
 export default defineComponent({
     data() {
         return {
-            isDarkMode: true
+            isDarkMode: true,
+            exampleProp: "Hello from parent"
         }
     },
     computed: {
@@ -38,7 +39,8 @@ export default defineComponent({
 <template>
     <div id="title" :class="isDarkMode ? 'darkBg' : 'lightBg'">
         <h1>LifeCycle</h1>
-        <component :is="currentComponent" ref="currentComponent" @toggle="receivedEmit"></component>
+        <component :is="currentComponent" ref="currentComponent" @toggle="receivedEmit" :sendProp="exampleProp">
+        </component>
     </div>
     <div id="btn">
         <button @click="toggleFromParent">Toggle</button>

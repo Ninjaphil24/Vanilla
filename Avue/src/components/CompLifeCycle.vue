@@ -3,8 +3,12 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
     name: 'CompLifeCycle',
+    props: {
+        sendProp: String
+    },
 
-    setup() {
+
+    setup(_, { emit }) {
         const loggedInUser = ref('')
         const loggedIn = ref(false)
         const loading = ref(true)
@@ -73,9 +77,22 @@ export default defineComponent({
             }
         } // login End
 
+        let darkMode = ref(true)
+        // Replacing created and beforeMount lifecycle hook
+        const bgState = localStorage.getItem('BG')
+        bgState === 'dark' ? darkMode.value = true : darkMode.value = false
+        emit("toggle", darkMode.value)
+
+
         function logout() {
             loggedIn.value = false
             localStorage.removeItem('jwt')
+        }
+        function toggleColor() {
+            console.log("Comp refs")
+            darkMode.value = !darkMode.value
+            emit("toggle", darkMode.value)
+            darkMode.value ? localStorage.setItem('BG', 'dark') : localStorage.setItem('BG', 'light')
         }
 
         return {
@@ -86,6 +103,7 @@ export default defineComponent({
             username,
             password,
             login,
+            toggleColor,
             logout
         }
     } // setup End
@@ -93,6 +111,7 @@ export default defineComponent({
 </script>
 
 <template>
+    <div>{{ sendProp }}</div>
     <div v-if="loading">Loading...</div>
     <div v-else-if="loggedIn">
         <h2>{{ loggedInUser }}</h2>
