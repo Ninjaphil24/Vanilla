@@ -3,6 +3,10 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
     name: 'OptLifeCycle',
+    props: {
+        sendProp: String
+    },
+    emits: ['toggle'],
     data() {
         return {
             loading: true,
@@ -89,11 +93,17 @@ export default defineComponent({
     },
     beforeMount() {
         this.$emit("toggle", this.darkMode)
+    },
+    mounted() {
+        console.log("$el log:")
+        console.log(this.$el)
+        this.$el.parentElement.children[1].textContent = "Filled div"
     }
 })
 </script>
 
 <template>
+    <div></div>
     <div v-if="loading">Loading...</div>
     <div v-else-if="loggedIn">
         <h2>{{ loggedInUser }}</h2>

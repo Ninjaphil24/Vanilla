@@ -1,12 +1,12 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 
 export default defineComponent({
     name: 'CompLifeCycle',
     props: {
         sendProp: String
     },
-
+    emits: ['toggle'],
 
     setup(_, { emit }) {
         const loggedInUser = ref('')
@@ -48,7 +48,6 @@ export default defineComponent({
 
         const username = ref('')
         const password = ref('')
-
         async function login() {
             try {
                 console.log("Comp Fetch")
@@ -83,6 +82,15 @@ export default defineComponent({
         bgState === 'dark' ? darkMode.value = true : darkMode.value = false
         emit("toggle", darkMode.value)
 
+        const emptyDiv = ref<HTMLElement | null>(null)
+        function emptyDivDollarSignEL() {
+            console.log(emptyDiv.value)
+            if (emptyDiv.value && emptyDiv.value.parentElement)
+                emptyDiv.value.parentElement.children[1].textContent = "Filled div"
+        }
+        onMounted(() => {
+            emptyDivDollarSignEL()
+        })
 
         function logout() {
             loggedIn.value = false
@@ -104,13 +112,15 @@ export default defineComponent({
             password,
             login,
             toggleColor,
-            logout
+            logout,
+            emptyDiv
         }
     } // setup End
 })
 </script>
 
 <template>
+    <div ref="emptyDiv"></div>
     <div>{{ sendProp }}</div>
     <div v-if="loading">Loading...</div>
     <div v-else-if="loggedIn">
