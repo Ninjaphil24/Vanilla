@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, handleError, onBeforeUnmount, onMounted, ref } from 'vue';
 
 export default defineComponent({
     name: 'CompLifeCycle',
@@ -84,7 +84,7 @@ export default defineComponent({
 
         const emptyDiv = ref<HTMLElement | null>(null)
         function emptyDivDollarSignEL() {
-            console.log(emptyDiv.value)
+            // console.log(emptyDiv.value)
             if (emptyDiv.value && emptyDiv.value.parentElement)
                 emptyDiv.value.parentElement.children[1].textContent = "Filled div"
         }
@@ -97,11 +97,36 @@ export default defineComponent({
             localStorage.removeItem('jwt')
         }
         function toggleColor() {
-            console.log("Comp refs")
+            // console.log("Comp refs")
             darkMode.value = !darkMode.value
             emit("toggle", darkMode.value)
             darkMode.value ? localStorage.setItem('BG', 'dark') : localStorage.setItem('BG', 'light')
         }
+
+        let btn = null as HTMLElement | null
+        let handleClick: (() => void) | null = null
+        const addListener = () => {
+            const largeObject = new Array(1000000).fill('leak')
+
+            btn = document.getElementsByTagName('button')[2]
+
+            handleClick = () => {
+                console.log(largeObject)
+            }
+
+            if (btn && handleClick) {
+                btn.addEventListener('click', handleClick)
+            }
+        }
+
+        onBeforeUnmount(() => {
+            console.log("Unmounted")
+            if (btn && handleClick) {
+                btn.removeEventListener('click', handleClick)
+            }
+            btn = null
+            handleClick = null
+        })
 
         return {
             loading,
@@ -113,7 +138,8 @@ export default defineComponent({
             login,
             toggleColor,
             logout,
-            emptyDiv
+            emptyDiv,
+            addListener
         }
     } // setup End
 })
@@ -136,4 +162,6 @@ export default defineComponent({
             <button type="submit">Login</button>
         </form>
     </div>
+    <h2>Memory Leak</h2>
+    <button @click="addListener">Start Leak</button>
 </template>
