@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, handleError, onBeforeUnmount, onMounted, ref } from 'vue';
+import { defineComponent, reactive, onBeforeUnmount, onMounted, ref, watch, watchEffect } from 'vue';
 
 export default defineComponent({
     name: 'CompLifeCycle',
@@ -88,8 +88,51 @@ export default defineComponent({
             if (emptyDiv.value && emptyDiv.value.parentElement)
                 emptyDiv.value.parentElement.children[1].textContent = "Filled div"
         }
+
+        let user = reactive(
+            {
+                username: 'John',
+                age: 30
+            }
+        )
+
+        function changeName() {
+            user.username == 'John' ? user.username = 'Johnnyboy' : user.username = 'John'
+
+        }
+
+        function changeAge() {
+            user.age++
+        }
+
+        watch(darkMode, (newval, oldval) => {
+            console.log("Darkmode has changed from ", oldval, " to ", newval)
+        })
+
+        watch(
+            () => user,
+            (newVal) => {
+                console.log("Changes to user: ", newVal)
+            },
+            {
+                deep: true
+            }
+        )
+        // Eager watcher
+        watch(
+            emptyDiv,
+            (newVal, oldVal) => {
+                // if (newVal != oldVal) {
+                emptyDivDollarSignEL()
+                // }
+            },
+            { immediate: true }
+        )
+
+        watchEffect(() => {
+        })
+
         onMounted(() => {
-            emptyDivDollarSignEL()
         })
 
         function logout() {
@@ -139,7 +182,10 @@ export default defineComponent({
             toggleColor,
             logout,
             emptyDiv,
-            addListener
+            addListener,
+            changeName,
+            changeAge,
+            user
         }
     } // setup End
 })
@@ -164,4 +210,7 @@ export default defineComponent({
     </div>
     <h2>Memory Leak</h2>
     <button @click="addListener">Start Leak</button>
+    <h2>Username is: {{ user.username }} Age: {{ user.age }}</h2>
+    <button @click="changeName">Change name</button>
+    <button @click="changeAge">Change age</button>
 </template>

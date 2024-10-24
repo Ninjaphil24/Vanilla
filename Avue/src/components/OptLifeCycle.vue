@@ -15,6 +15,10 @@ export default defineComponent({
             password: '',
             loggedIn: false,
             darkMode: true,
+            user: {
+                username: 'John',
+                age: 30
+            }
         }
     },
     methods: {
@@ -49,6 +53,23 @@ export default defineComponent({
             this.darkMode = !this.darkMode
             this.$emit("toggle", this.darkMode)
             this.darkMode ? localStorage.setItem('BG', 'dark') : localStorage.setItem('BG', 'light')
+        },
+        changeName() {
+            this.user.username == 'John' ? this.user.username = 'Johnnyboy' : this.user.username = 'John'
+        },
+        changeAge() {
+            this.user.age++
+        }
+    },
+    watch: {
+        darkMode(newval, oldval) {
+            console.log("Darkmode has changed from ", oldval, " to ", newval)
+        },
+        user: {
+            handler: function example(newVal) {
+                console.log("Changes to user: ", newVal)
+            },
+            deep: true
         }
     },
     beforeCreate() {
@@ -118,4 +139,7 @@ export default defineComponent({
             <button type="submit">Login</button>
         </form>
     </div>
+    <h2>Username is: {{ user.username }} Age: {{ user.age }}</h2>
+    <button @click="changeName">Change name</button>
+    <button @click="changeAge">Change age</button>
 </template>
